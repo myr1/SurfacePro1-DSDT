@@ -11470,5 +11470,53 @@ DefinitionBlock ("iASL9YSIbJ.aml", "DSDT", 2, "Apple ", "O E M R", 0x00000050)
         }
     }
     Method (B1B2, 2, NotSerialized) { Return(Or(Arg0, ShiftLeft(Arg1, 8))) }
+    Device (RMNE)
+    {
+        Name (_ADR, Zero)
+        Name (_HID, "NULE0000")
+        Name (MAC, Buffer (0x06)
+        {
+            0x11, 0x22, 0x33, 0x44, 0x55, 0x66
+        })
+        Method (_DSM, 4, NotSerialized)
+        {
+            If (LEqual (Arg2, Zero))
+            {
+                Return (Buffer (One)
+                {
+                    0x03
+                })
+            }
+
+            Return (Package (0x0A)
+            {
+                "built-in", 
+                Buffer (One)
+                {
+                    0x00
+                }, 
+
+                "IOName", 
+                "ethernet", 
+                "name", 
+                Buffer (0x09)
+                {
+                    "ethernet"
+                }, 
+
+                "model", 
+                Buffer (0x15)
+                {
+                    "RM-NullEthernet-1001"
+                }, 
+
+                "device_type", 
+                Buffer (0x09)
+                {
+                    "ethernet"
+                }
+            })
+        }
+    }
 }
 
