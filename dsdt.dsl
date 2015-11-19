@@ -6229,6 +6229,29 @@ DefinitionBlock ("iASL9YSIbJ.aml", "DSDT", 2, "Apple ", "O E M R", 0x00000050)
             {
                 Return (GPRW (0x0D, 0x04))
             }
+
+            Method (_DSM, 4, NotSerialized)
+            {
+                Store (Package (0x06)
+                    {
+                        "hda-gfx", 
+                        Buffer (0x0A)
+                        {
+                            "onboard-1"
+                        }, 
+
+                        "layout-id", 
+                        Buffer (0x04)
+                        {
+                            0x03, 0x00, 0x00, 0x00
+                        }, 
+
+                        "PinConfigurations", 
+                        Buffer (Zero) {}
+                    }, Local0)
+                DTGP (Arg0, Arg1, Arg2, Arg3, RefOf (Local0))
+                Return (Local0)
+            }
         }
 
         Device (SAT0)
@@ -8006,6 +8029,12 @@ DefinitionBlock ("iASL9YSIbJ.aml", "DSDT", 2, "Apple ", "O E M R", 0x00000050)
                 LBPC,   8, 
                         Offset (0xBC), 
                 ASLS,   32
+            }
+
+            OperationRegion (IGD2, PCI_Config, 0x10, 0x04)
+            Field (IGD2, AnyAcc, NoLock, Preserve)
+            {
+                BAR1,   32
             }
 
             OperationRegion (IGDM, SystemMemory, ASLB, 0x2000)
@@ -11228,6 +11257,217 @@ DefinitionBlock ("iASL9YSIbJ.aml", "DSDT", 2, "Apple ", "O E M R", 0x00000050)
                 0x00
             }, Arg4)
         Return (Zero)
+    }
+    Scope (_SB)
+    {
+        Device (PNLF)
+        {
+            Name (_HID, EisaId ("APP0002"))
+            Name (_CID, "backlight")
+            Name (_UID, 0x0A)
+            Name (_STA, 0x0B)
+            OperationRegion (BRIT, SystemMemory, Subtract (^PCI0.GFX0.BAR1, 0x04), 0x000E1184)
+            Field (BRIT, AnyAcc, Lock, Preserve)
+            {
+                        Offset (0x48250), 
+                LEV2,   32, 
+                LEVL,   32, 
+                        Offset (0x70040), 
+                P0BL,   32, 
+                        Offset (0xC8250), 
+                LEVW,   32, 
+                LEVX,   32, 
+                        Offset (0xE1180), 
+                PCHL,   32
+            }
+
+            Name (KPCH, Zero)
+            Method (_INI, 0, NotSerialized)
+            {
+                Store (PCHL, KPCH)
+                Store (ShiftRight (KLVX, 0x10), Local0)
+                Store (ShiftRight (LEVX, 0x10), Local1)
+                If (LNotEqual (Local0, Local1))
+                {
+                    Divide (Multiply (LEVL, Local0), Local1, , Local0)
+                    Store (Local0, LEVL)
+                    Store (KLVX, LEVX)
+                }
+            }
+
+            Method (_BCM, 1, NotSerialized)
+            {
+                If (LNotEqual (PCHL, KPCH))
+                {
+                    Store (KPCH, PCHL)
+                }
+
+                If (LNotEqual (LEVW, 0x80000000))
+                {
+                    Store (0x80000000, LEVW)
+                }
+
+                If (LNotEqual (LEVX, KLVX))
+                {
+                    Store (KLVX, LEVX)
+                }
+
+                Store (Match (_BCL, MGE, Arg0, MTR, Zero, 0x02), Local0)
+                If (LEqual (Local0, Ones))
+                {
+                    Subtract (SizeOf (_BCL), One, Local0)
+                }
+
+                If (LNotEqual (LEV2, 0x80000000))
+                {
+                    Store (0x80000000, LEV2)
+                }
+
+                Store (DerefOf (Index (_BCL, Local0)), LEVL)
+            }
+
+            Method (_BQC, 0, NotSerialized)
+            {
+                Store (Match (_BCL, MGE, LEVL, MTR, Zero, 0x02), Local0)
+                If (LEqual (Local0, Ones))
+                {
+                    Subtract (SizeOf (_BCL), One, Local0)
+                }
+
+                Return (DerefOf (Index (_BCL, Local0)))
+            }
+
+            Method (_DOS, 1, NotSerialized)
+            {
+                ^^PCI0.GFX0._DOS (Arg0)
+            }
+
+            Method (XBCM, 1, NotSerialized)
+            {
+                If (LNotEqual (PCHL, KPCH))
+                {
+                    Store (KPCH, PCHL)
+                }
+
+                If (LNotEqual (LEVW, 0x80000000))
+                {
+                    Store (0x80000000, LEVW)
+                }
+
+                If (LNotEqual (LEVX, KLVX))
+                {
+                    Store (KLVX, LEVX)
+                }
+
+                If (LGreater (Arg0, XRGH))
+                {
+                    Store (XRGH, Arg0)
+                }
+
+                If (LAnd (Arg0, LLess (Arg0, XRGL)))
+                {
+                    Store (XRGL, Arg0)
+                }
+
+                If (LNotEqual (LEV2, 0x80000000))
+                {
+                    Store (0x80000000, LEV2)
+                }
+
+                Store (Arg0, LEVL)
+            }
+
+            Method (XBQC, 0, NotSerialized)
+            {
+                Store (LEVL, Local0)
+                If (LGreater (Local0, XRGH))
+                {
+                    Store (XRGH, Local0)
+                }
+
+                If (LAnd (Local0, LLess (Local0, XRGL)))
+                {
+                    Store (XRGL, Local0)
+                }
+
+                Return (Local0)
+            }
+
+            Name (XOPT, Zero)
+            Name (XRGL, 0x28)
+            Name (XRGH, 0x0710)
+            Name (KLVX, 0x07100000)
+            Name (_BCL, Package (0x43)
+            {
+                0x0710, 
+                0x01DF, 
+                Zero, 
+                0x37, 
+                0x37, 
+                0x39, 
+                0x3B, 
+                0x3E, 
+                0x42, 
+                0x47, 
+                0x4D, 
+                0x53, 
+                0x5B, 
+                0x63, 
+                0x6C, 
+                0x77, 
+                0x82, 
+                0x8E, 
+                0x9A, 
+                0xA8, 
+                0xB7, 
+                0xC6, 
+                0xD6, 
+                0xE8, 
+                0xFA, 
+                0x010D, 
+                0x0121, 
+                0x0135, 
+                0x014B, 
+                0x0162, 
+                0x0179, 
+                0x0191, 
+                0x01AA, 
+                0x01C5, 
+                0x01DF, 
+                0x01FB, 
+                0x0218, 
+                0x0236, 
+                0x0254, 
+                0x0273, 
+                0x0294, 
+                0x02B5, 
+                0x02D7, 
+                0x02FA, 
+                0x031D, 
+                0x0342, 
+                0x0368, 
+                0x038E, 
+                0x03B5, 
+                0x03DE, 
+                0x0407, 
+                0x0431, 
+                0x045B, 
+                0x0487, 
+                0x04B4, 
+                0x04E1, 
+                0x0510, 
+                0x053F, 
+                0x056F, 
+                0x05A0, 
+                0x05D2, 
+                0x0605, 
+                0x0638, 
+                0x066D, 
+                0x06A2, 
+                0x06D9, 
+                0x0710
+            })
+        }
     }
 }
 
