@@ -10013,9 +10013,9 @@ DefinitionBlock ("iASL9YSIbJ.aml", "DSDT", 2, "Apple ", "O E M R", 0x00000050)
                 SPFL,   8, 
                 BTFL,   8, 
                 EBTF,   8, 
-                F0RM,   16, 
+                RM00,8,RM01,8, 
                 F0DT,   8, 
-                F1RM,   16, 
+                RM10,8,RM11,8, 
                 F1DT,   8, 
                 CTYF,   8, 
                 CUTP,   8, 
@@ -10043,21 +10043,21 @@ DefinitionBlock ("iASL9YSIbJ.aml", "DSDT", 2, "Apple ", "O E M R", 0x00000050)
                 AGID,   32, 
                         Offset (0x53), 
                 B0TP,   16, 
-                B0VL,   16, 
-                B0CR,   16, 
+                VL00,8,VL01,8, 
+                CR00,8,CR01,8, 
                 B0AC,   16, 
                 B0ME,   16, 
                 B0RS,   16, 
-                B0RC,   16, 
-                B0FC,   16, 
+                RC00,8,RC01,8, 
+                FC00,8,FC01,8, 
                 B0MC,   16, 
                 B0MV,   16, 
                 B0ST,   16, 
-                B0CC,   16, 
-                B0DC,   16, 
-                B0DV,   16, 
+                CC00,8,CC01,8, 
+                DC00,8,DC01,8, 
+                DV00,8,DV01,8, 
                 B0SI,   16, 
-                B0MD,   16, 
+                MD00,8,MD01,8, 
                 B0SN,   16, 
                 B0MN,   8, 
                         Offset (0x81), 
@@ -10068,21 +10068,21 @@ DefinitionBlock ("iASL9YSIbJ.aml", "DSDT", 2, "Apple ", "O E M R", 0x00000050)
                 B0MA,   8, 
                         Offset (0xA3), 
                 B1TP,   16, 
-                B1VL,   16, 
-                B1CR,   16, 
+                VL10,8,VL11,8, 
+                CR10,8,CR11,8, 
                 B1AC,   16, 
                 B1ME,   16, 
                 B1RS,   16, 
-                B1RC,   16, 
-                B1FC,   16, 
+                RC10,8,RC11,8, 
+                FC10,8,FC11,8, 
                 B1MC,   16, 
                 B1MV,   16, 
                 B1ST,   16, 
-                B1CC,   16, 
-                B1DC,   16, 
-                B1DV,   16, 
+                CC10,8,CC11,8, 
+                DC10,8,DC11,8, 
+                DV10,8,DV11,8, 
                 B1SI,   16, 
-                B1MD,   16, 
+                MD10,8,MD11,8, 
                 B1SN,   16, 
                 B1MN,   8, 
                         Offset (0xD1), 
@@ -10245,7 +10245,7 @@ DefinitionBlock ("iASL9YSIbJ.aml", "DSDT", 2, "Apple ", "O E M R", 0x00000050)
             {
                 If (ECAV ())
                 {
-                    Store (B0DC, Local0)
+                    Store (B1B2(DC00,DC01), Local0)
                     And (Local0, 0xFFFF, Local0)
                 }
                 Else
@@ -10260,7 +10260,7 @@ DefinitionBlock ("iASL9YSIbJ.aml", "DSDT", 2, "Apple ", "O E M R", 0x00000050)
             {
                 If (ECAV ())
                 {
-                    Store (B1DC, Local0)
+                    Store (B1B2(DC10,DC11), Local0)
                     And (Local0, 0xFFFF, Local0)
                 }
                 Else
@@ -10275,7 +10275,7 @@ DefinitionBlock ("iASL9YSIbJ.aml", "DSDT", 2, "Apple ", "O E M R", 0x00000050)
             {
                 If (ECAV ())
                 {
-                    Store (B0FC, Local0)
+                    Store (B1B2(FC00,FC01), Local0)
                     And (Local0, 0xFFFF, Local0)
                 }
                 Else
@@ -10290,7 +10290,7 @@ DefinitionBlock ("iASL9YSIbJ.aml", "DSDT", 2, "Apple ", "O E M R", 0x00000050)
             {
                 If (ECAV ())
                 {
-                    Store (B1FC, Local0)
+                    Store (B1B2(FC10,FC11), Local0)
                     And (Local0, 0xFFFF, Local0)
                 }
                 Else
@@ -10310,7 +10310,7 @@ DefinitionBlock ("iASL9YSIbJ.aml", "DSDT", 2, "Apple ", "O E M R", 0x00000050)
             {
                 If (ECAV ())
                 {
-                    Store (B0DV, Local0)
+                    Store (B1B2(DV00,DV01), Local0)
                 }
                 Else
                 {
@@ -10324,7 +10324,7 @@ DefinitionBlock ("iASL9YSIbJ.aml", "DSDT", 2, "Apple ", "O E M R", 0x00000050)
             {
                 If (ECAV ())
                 {
-                    Store (B1DV, Local0)
+                    Store (B1B2(DV10,DV11), Local0)
                 }
                 Else
                 {
@@ -10392,7 +10392,7 @@ DefinitionBlock ("iASL9YSIbJ.aml", "DSDT", 2, "Apple ", "O E M R", 0x00000050)
             {
                 If (ECAV ())
                 {
-                    Store (B0CR, Local0)
+                    Store (B1B2(CR00,CR01), Local0)
                 }
                 Else
                 {
@@ -10406,7 +10406,7 @@ DefinitionBlock ("iASL9YSIbJ.aml", "DSDT", 2, "Apple ", "O E M R", 0x00000050)
             {
                 If (ECAV ())
                 {
-                    Store (B1CR, Local0)
+                    Store (B1B2(CR10,CR11), Local0)
                 }
                 Else
                 {
@@ -10420,7 +10420,7 @@ DefinitionBlock ("iASL9YSIbJ.aml", "DSDT", 2, "Apple ", "O E M R", 0x00000050)
             {
                 If (ECAV ())
                 {
-                    Store (B0RC, Local0)
+                    Store (B1B2(RC00,RC01), Local0)
                     If (LEqual (Local0, 0xFFFF))
                     {
                         Store (Ones, Local0)
@@ -10438,7 +10438,7 @@ DefinitionBlock ("iASL9YSIbJ.aml", "DSDT", 2, "Apple ", "O E M R", 0x00000050)
             {
                 If (ECAV ())
                 {
-                    Store (B1RC, Local0)
+                    Store (B1B2(RC10,RC11), Local0)
                     If (LEqual (Local0, 0xFFFF))
                     {
                         Store (Ones, Local0)
@@ -10456,7 +10456,7 @@ DefinitionBlock ("iASL9YSIbJ.aml", "DSDT", 2, "Apple ", "O E M R", 0x00000050)
             {
                 If (ECAV ())
                 {
-                    Store (B0VL, Local0)
+                    Store (B1B2(VL00,VL01), Local0)
                 }
                 Else
                 {
@@ -10470,7 +10470,7 @@ DefinitionBlock ("iASL9YSIbJ.aml", "DSDT", 2, "Apple ", "O E M R", 0x00000050)
             {
                 If (ECAV ())
                 {
-                    Store (B1VL, Local0)
+                    Store (B1B2(VL10,VL11), Local0)
                 }
                 Else
                 {
@@ -10788,8 +10788,8 @@ DefinitionBlock ("iASL9YSIbJ.aml", "DSDT", 2, "Apple ", "O E M R", 0x00000050)
                 Store (Local5, Index (PBIF, 0x06))
                 Divide (Local5, 0x03, Local3, Local6)
                 Store (Local6, Index (PBIF, 0x07))
-                Store (^^LPCB.EC0.B0CC, Index (PBIF, 0x08))
-                Divide (^^LPCB.EC0.B0RC, Local2, Local2, Local0)
+                Store (B1B2(^^LPCB.EC0.CC00,^^LPCB.EC0.CC01), Index (PBIF, 0x08))
+                Divide (B1B2(^^LPCB.EC0.RC00,^^LPCB.EC0.RC01), Local2, Local2, Local0)
                 Multiply (Local0, 0x000186A0, Local0)
                 Store (Local0, Index (PBIF, 0x09))
                 Divide (Local1, 0x64, Local3, Local7)
@@ -11040,8 +11040,8 @@ DefinitionBlock ("iASL9YSIbJ.aml", "DSDT", 2, "Apple ", "O E M R", 0x00000050)
                 Store (Local5, Index (PBIF, 0x06))
                 Divide (Local5, 0x03, Local3, Local6)
                 Store (Local6, Index (PBIF, 0x07))
-                Store (^^LPCB.EC0.B1CC, Index (PBIF, 0x08))
-                Divide (^^LPCB.EC0.B1RC, Local2, Local2, Local0)
+                Store (B1B2 (^^LPCB.EC0.CC00, ^^LPCB.EC0.CC01), Index (PBIF, 0x08))
+                Divide (B1B2 (^^LPCB.EC0.RC00, ^^LPCB.EC0.RC01), Local2, Local2, Local0)
                 Multiply (Local0, 0x000186A0, Local0)
                 Store (Local0, Index (PBIF, 0x09))
                 Divide (Local1, 0x64, Local3, Local7)
@@ -11469,5 +11469,6 @@ DefinitionBlock ("iASL9YSIbJ.aml", "DSDT", 2, "Apple ", "O E M R", 0x00000050)
             })
         }
     }
+    Method (B1B2, 2, NotSerialized) { Return(Or(Arg0, ShiftLeft(Arg1, 8))) }
 }
 
