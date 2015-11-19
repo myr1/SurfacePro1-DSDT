@@ -4619,6 +4619,11 @@ DefinitionBlock ("iASL9YSIbJ.aml", "DSDT", 2, "Apple ", "O E M R", 0x00000050)
             {
                 Name (_ADR, 0x00040000)
             }
+
+            Device (MCHC)
+            {
+                Name (_ADR, Zero)
+            }
         }
 
         Scope (\_GPE)
@@ -8675,37 +8680,117 @@ DefinitionBlock ("iASL9YSIbJ.aml", "DSDT", 2, "Apple ", "O E M R", 0x00000050)
                 }
             }
 
-            Method (_DSM, 4, Serialized)
+            Method (_DSM, 4, NotSerialized)
             {
-                Name (DRET, Buffer (0x04)
-                {
-                    0x00
-                })
-                If (LEqual (Arg0, Buffer (0x10)
-                        {
-                            /* 0000 */    0xE1, 0x75, 0x39, 0x6F, 0x82, 0x7A, 0x67, 0x4F, 
-                            /* 0008 */    0x8B, 0x97, 0x15, 0xBE, 0xE0, 0x60, 0xBE, 0xDF
-                        }))
-                {
-                    If (LEqual (Arg2, Zero))
+                Store (Package (0x1E)
                     {
-                        CreateWordField (DRET, Zero, F0SS)
-                        Store (0x02, F0SS)
-                        Return (DRET)
-                    }
+                        "device-id", 
+                        Buffer (0x04)
+                        {
+                            0x66, 0x01, 0x00, 0x00
+                        }, 
 
-                    If (LEqual (Arg2, One))
-                    {
-                        If (LEqual (^^PEG0.PEGP.LNKV, 0x03))
+                        "vendor-id", 
+                        Buffer (0x04)
                         {
-                            Return (Zero)
+                            0x86, 0x80, 0x00, 0x00
+                        }, 
+
+                        "AAPL,ig-platform-id", 
+                        Buffer (0x04)
+                        {
+                            0x09, 0x00, 0x66, 0x01
+                        }, 
+
+                        "subsystem-vendor-id", 
+                        Buffer (0x04)
+                        {
+                            0x6B, 0x10, 0x00, 0x00
+                        }, 
+
+                        "model", 
+                        Buffer (0x1E)
+                        {
+                            "Intel HD Graphics 4000"
+                        }, 
+
+                        "VRAM,totalsize", 
+                        Buffer (0x04)
+                        {
+                            0x00, 0x02, 0x00, 0x00
+                        }, 
+
+                        "hda-gfx", 
+                        Buffer (0x0A)
+                        {
+                            "onboard-1"
+                        }, 
+
+                        "AAPL00,DualLink", 
+                        Buffer (0x04)
+                        {
+                            0x01, 0x00, 0x00, 0x00
+                        }, 
+
+                        "AAPL,HasLid", 
+                        Buffer (0x04)
+                        {
+                            0x01, 0x00, 0x00, 0x00
+                        }, 
+
+                        "AAPL,HasPanel", 
+                        Buffer (0x04)
+                        {
+                            0x01, 0x00, 0x00, 0x00
+                        }, 
+
+                        "AAPL,backlight-control", 
+                        Buffer (0x04)
+                        {
+                            0x01, 0x00, 0x00, 0x00
+                        }, 
+
+                        "AAPL00,backlight-control", 
+                        Buffer (0x04)
+                        {
+                            0x01, 0x00, 0x00, 0x00
+                        }, 
+
+                        "AAPL00,boot-display", 
+                        Buffer (0x04)
+                        {
+                            0x01, 0x00, 0x00, 0x00
+                        }, 
+
+                        "built-in", 
+                        Buffer (One)
+                        {
+                            0x01
+                        }, 
+
+                        "AAPL00,override-no-connect", 
+                        Buffer (0x80)
+                        {
+                            /* 0000 */    0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x00, 
+                            /* 0008 */    0x06, 0x10, 0x14, 0xA0, 0x00, 0x00, 0x00, 0x00, 
+                            /* 0010 */    0x0A, 0x16, 0x01, 0x04, 0xA5, 0x1D, 0x12, 0x78, 
+                            /* 0018 */    0x02, 0x6F, 0xB1, 0xA7, 0x55, 0x4C, 0x9E, 0x25, 
+                            /* 0020 */    0x0C, 0x50, 0x54, 0x00, 0x00, 0x00, 0x01, 0x01, 
+                            /* 0028 */    0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 
+                            /* 0030 */    0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x2A, 0x35, 
+                            /* 0038 */    0x80, 0xA0, 0x70, 0x38, 0x0B, 0x40, 0x18, 0x10, 
+                            /* 0040 */    0x35, 0x00, 0xEB, 0x84, 0x00, 0x00, 0x00, 0x19, 
+                            /* 0048 */    0x00, 0x00, 0x00, 0xFC, 0x00, 0x43, 0x6F, 0x6C, 
+                            /* 0050 */    0x6F, 0x72, 0x20, 0x4C, 0x43, 0x44, 0x0A, 0x20, 
+                            /* 0058 */    0x20, 0x20, 0x00, 0x00, 0x00, 0xFD, 0x00, 0x38, 
+                            /* 0060 */    0x4C, 0x1E, 0x53, 0x11, 0x00, 0x0A, 0x20, 0x20, 
+                            /* 0068 */    0x20, 0x20, 0x20, 0x20, 0x00, 0x00, 0x00, 0xFE, 
+                            /* 0070 */    0x00, 0x31, 0x30, 0x36, 0x48, 0x4C, 0x30, 0x31, 
+                            /* 0078 */    0x2D, 0x30, 0x30, 0x31, 0x0A, 0x20, 0x00, 0xF0
                         }
-
-                        Return (One)
-                    }
-                }
-
-                Return (DRET)
+                    }, Local0)
+                DTGP (Arg0, Arg1, Arg2, Arg3, RefOf (Local0))
+                Return (Local0)
             }
         }
     }
@@ -9500,7 +9585,10 @@ DefinitionBlock ("iASL9YSIbJ.aml", "DSDT", 2, "Apple ", "O E M R", 0x00000050)
     {
         Method (_HID, 0, NotSerialized)
         {
-            If (TCMF) {}
+            If (TCMF)
+            {
+                Return (Zero)
+            }
             Else
             {
                 Return (0x0201D824)
@@ -11107,6 +11195,39 @@ DefinitionBlock ("iASL9YSIbJ.aml", "DSDT", 2, "Apple ", "O E M R", 0x00000050)
     {
         \_SB.PCI0.LPCB.SWAK (Arg0)
         \_SB.PCI0.NWAK (Arg0)
+    }
+
+    Method (DTGP, 5, NotSerialized)
+    {
+        If (LEqual (Arg0, Buffer (0x10)
+                {
+                    /* 0000 */    0xC6, 0xB7, 0xB5, 0xA0, 0x18, 0x13, 0x1C, 0x44, 
+                    /* 0008 */    0xB0, 0xC9, 0xFE, 0x69, 0x5E, 0xAF, 0x94, 0x9B
+                }))
+        {
+            If (LEqual (Arg1, One))
+            {
+                If (LEqual (Arg2, Zero))
+                {
+                    Store (Buffer (One)
+                        {
+                            0x03
+                        }, Arg4)
+                    Return (One)
+                }
+
+                If (LEqual (Arg2, One))
+                {
+                    Return (One)
+                }
+            }
+        }
+
+        Store (Buffer (One)
+            {
+                0x00
+            }, Arg4)
+        Return (Zero)
     }
 }
 
