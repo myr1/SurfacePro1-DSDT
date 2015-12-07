@@ -10150,9 +10150,7 @@ DefinitionBlock ("iASL9YSIbJ.aml", "DSDT", 2, "Apple ", "O E M R", 0x00000050)
                 If (ECFL)
                 {
                     Notify (BAT0, 0x81)
-                    Notify (BAT1, 0x81)
                     Notify (BAT0, 0x80)
-                    Notify (BAT1, 0x80)
                 }
             }
 
@@ -10549,10 +10547,6 @@ DefinitionBlock ("iASL9YSIbJ.aml", "DSDT", 2, "Apple ", "O E M R", 0x00000050)
             Method (_Q10, 0, NotSerialized)
             {
                 Notify (BAT0, 0x80)
-                If (LEqual (ISB2, One))
-                {
-                    Notify (BAT1, 0x80)
-                }
             }
 
             Name (ISB2, Zero)
@@ -10560,23 +10554,17 @@ DefinitionBlock ("iASL9YSIbJ.aml", "DSDT", 2, "Apple ", "O E M R", 0x00000050)
             {
                 Store (PSFL, Local0)
                 Store (One, ISB2)
-                Notify (BAT1, Zero)
             }
 
             Method (_Q18, 0, NotSerialized)
             {
                 Store (PSFL, Local0)
                 Store (Zero, ISB2)
-                Notify (BAT1, 0x03)
             }
 
             Method (_Q19, 0, NotSerialized)
             {
                 Store (EBTF, Local0)
-                If (LEqual (ISB2, One))
-                {
-                    Notify (BAT1, 0x80)
-                }
             }
 
             Method (_Q36, 0, NotSerialized)
@@ -10867,263 +10855,6 @@ DefinitionBlock ("iASL9YSIbJ.aml", "DSDT", 2, "Apple ", "O E M R", 0x00000050)
                 If (^^LPCB.EC0.ACAP ())
                 {
                     If (^^LPCB.EC0.BCHG (Zero))
-                    {
-                        Store (0x02, Local0)
-                    }
-                    Else
-                    {
-                        Store (Zero, Local0)
-                    }
-                }
-                Else
-                {
-                    And (Arg0, One, Local0)
-                }
-
-                And (Arg0, 0x04, Local2)
-                Or (Local0, Local2, Local0)
-                If (LGreaterEqual (Local1, 0x8000))
-                {
-                    Subtract (0xFFFF, Local1, Local1)
-                }
-
-                Store (Arg2, Local2)
-                Store (Local0, Index (PBST, Zero))
-                Store (Local1, Index (PBST, One))
-                Store (Local2, Index (PBST, 0x02))
-                Store (Arg3, Index (PBST, 0x03))
-            }
-        }
-    }
-
-    Scope (_SB.PCI0)
-    {
-        Device (BAT1)
-        {
-            Name (_HID, EisaId ("PNP0C0A"))
-            Name (_UID, One)
-            Name (_PCL, Package (0x01)
-            {
-                PCI0
-            })
-            Name (PUNT, One)
-            Name (LFCC, 0x1770)
-            Method (_EJ0, 1, NotSerialized)
-            {
-            }
-
-            Method (_STA, 0, NotSerialized)
-            {
-                If (LEqual (^^LPCB.EC0.GBTT (One), Zero))
-                {
-                    Return (Zero)
-                }
-                Else
-                {
-                    Return (0x1F)
-                }
-            }
-
-            Name (NBIF, Package (0x14)
-            {
-                Zero, 
-                Zero, 
-                0xFFFFFFFF, 
-                0xFFFFFFFF, 
-                One, 
-                0xFFFFFFFF, 
-                0xFFFFFFFF, 
-                0xFFFFFFFF, 
-                0xFFFFFFFF, 
-                Zero, 
-                0xFFFFFFFF, 
-                0xFFFFFFFF, 
-                0xFFFFFFFF, 
-                0xFFFFFFFF, 
-                0xFFFFFFFF, 
-                0xFFFFFFFF, 
-                "", 
-                "", 
-                "", 
-                ""
-            })
-            Name (PBIF, Package (0x14)
-            {
-                Zero, 
-                Zero, 
-                0xFFFFFFFF, 
-                0xFFFFFFFF, 
-                One, 
-                0xFFFFFFFF, 
-                0xFFFFFFFF, 
-                0xFFFFFFFF, 
-                0xFFFFFFFF, 
-                Zero, 
-                0xFFFFFFFF, 
-                0xFFFFFFFF, 
-                0xFFFFFFFF, 
-                0xFFFFFFFF, 
-                0xFFFFFFFF, 
-                0xFFFFFFFF, 
-                "", 
-                "", 
-                "", 
-                ""
-            })
-            Method (_BIX, 0, NotSerialized)
-            {
-                P8XH (Zero, 0x71)
-                If (LEqual (^^LPCB.EC0.GBTT (One), Zero))
-                {
-                    Store (0xE3, DBG8)
-                    Return (NBIF)
-                }
-
-                If (LEqual (^^LPCB.EC0.GBTT (One), 0xFF))
-                {
-                    Store (0xE4, DBG8)
-                    Return (NBIF)
-                }
-
-                Store (^^LPCB.EC0.BIF0 (), Local0)
-                Store (^^LPCB.EC0.BIX1 (), Local1)
-                Store (^^LPCB.EC0.BIX2 (), Local2)
-                Store (^^LPCB.EC0.BIF3 (), Local3)
-                Store (^^LPCB.EC0.BIX4 (), Local4)
-                If (LNotEqual (Local0, Ones))
-                {
-                    If (LNotEqual (Local1, Ones))
-                    {
-                        If (LNotEqual (Local2, Ones))
-                        {
-                            If (LNotEqual (Local3, Ones))
-                            {
-                                If (LNotEqual (Local4, Ones))
-                                {
-                                    FBIF (Local0, Local1, Local2, Local3, Local4)
-                                    Store (0xAB, DBG8)
-                                    Return (PBIF)
-                                }
-                            }
-                        }
-                    }
-                }
-
-                Store (0xE5, DBG8)
-                Return (NBIF)
-            }
-
-            Method (_BTP, 1, NotSerialized)
-            {
-                If (^^LPCB.EC0.B1PT)
-                {
-                    Store (Arg0, ^^LPCB.EC0.B1AH)
-                }
-                Else
-                {
-                    Store (0x05, ^^LPCB.EC0.B1AH)
-                }
-            }
-
-            Method (FBIF, 5, NotSerialized)
-            {
-                Store (Arg0, PUNT)
-                Store (Arg1, Local1)
-                Store (Arg2, Local2)
-                Store (Arg0, Index (PBIF, One))
-                Store (Local1, Index (PBIF, 0x02))
-                Store (Local2, Index (PBIF, 0x03))
-                Store (Local2, LFCC)
-                Store (Arg3, Index (PBIF, 0x04))
-                Store (Arg4, Index (PBIF, 0x05))
-                Divide (Local1, 0x0A, Local3, Local5)
-                Store (Local5, Index (PBIF, 0x06))
-                Divide (Local5, 0x03, Local3, Local6)
-                Store (Local6, Index (PBIF, 0x07))
-                Store (B1B2 (^^LPCB.EC0.CC00, ^^LPCB.EC0.CC01), Index (PBIF, 0x08))
-                Divide (B1B2 (^^LPCB.EC0.RC00, ^^LPCB.EC0.RC01), Local2, Local2, Local0)
-                Multiply (Local0, 0x000186A0, Local0)
-                Store (Local0, Index (PBIF, 0x09))
-                Divide (Local1, 0x64, Local3, Local7)
-                Store (Local7, Index (PBIF, 0x0E))
-                Store (Local7, Index (PBIF, 0x0F))
-                If (LEqual (^^LPCB.EC0.B1MN, 0x4C))
-                {
-                    Store ("X863568", Index (PBIF, 0x10))
-                    Store ("1F11", Index (PBIF, 0x11))
-                    Store ("LION", Index (PBIF, 0x12))
-                    Store ("LGC_LGC", Index (PBIF, 0x13))
-                }
-                Else
-                {
-                    Store ("X863568", Index (PBIF, 0x10))
-                    Store ("291E", Index (PBIF, 0x11))
-                    Store ("LION", Index (PBIF, 0x12))
-                    Store ("SDI", Index (PBIF, 0x13))
-                }
-            }
-
-            Name (PBST, Package (0x04)
-            {
-                Zero, 
-                0x05FF, 
-                0x146B, 
-                0x1367
-            })
-            Name (NBST, Package (0x04)
-            {
-                Zero, 
-                0xFFFFFFFF, 
-                0xFFFFFFFF, 
-                0xFFFFFFFF
-            })
-            Method (_BST, 0, NotSerialized)
-            {
-                P8XH (One, 0x72)
-                If (LEqual (^^LPCB.EC0.GBTT (One), Zero))
-                {
-                    Store (0xE0, DBG8)
-                    Return (NBST)
-                }
-
-                If (LEqual (^^LPCB.EC0.GBTT (One), 0xFF))
-                {
-                    Store (0xE1, DBG8)
-                    Return (NBST)
-                }
-
-                Store (^^LPCB.EC0.BST2 (), Local0)
-                Store (^^LPCB.EC0.BCR2 (), Local1)
-                Store (^^LPCB.EC0.BRC2 (), Local2)
-                Store (^^LPCB.EC0.BVO2 (), Local3)
-                If (LNotEqual (Local0, Ones))
-                {
-                    If (LNotEqual (Local1, Ones))
-                    {
-                        If (LNotEqual (Local2, Ones))
-                        {
-                            If (LNotEqual (Local3, Ones))
-                            {
-                                FBST (Local0, Local1, Local2, Local3)
-                                Store (0xAA, DBG8)
-                                Return (PBST)
-                            }
-                        }
-                    }
-                }
-
-                Store (0xE2, DBG8)
-                Return (NBST)
-            }
-
-            Method (FBST, 4, NotSerialized)
-            {
-                And (Arg1, 0xFFFF, Local1)
-                Store (Zero, Local0)
-                Store (Zero, Local3)
-                If (^^LPCB.EC0.ACAP ())
-                {
-                    If (^^LPCB.EC0.BCHG (One))
                     {
                         Store (0x02, Local0)
                     }
